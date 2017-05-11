@@ -1,3 +1,11 @@
 <resources>
+
+    <!-- App Info -->
     <string name="app_name">NannyApp</string>
+
+    <!-- Words -->
+    <string name="word_receiver">Receptor</string>
+    <string name="word_notifier">Notificador</string>
+    <string name="word_help">Ajuda</string>
+
 </resources>
