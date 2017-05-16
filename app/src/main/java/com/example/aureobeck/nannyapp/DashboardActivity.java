@@ -1,13 +1,30 @@
 package com.example.aureobeck.nannyapp;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
+
+import be.tarsos.dsp.AudioDispatcher;
+import be.tarsos.dsp.AudioEvent;
+import be.tarsos.dsp.io.android.AudioDispatcherFactory;
+import be.tarsos.dsp.pitch.PitchDetectionHandler;
+import be.tarsos.dsp.pitch.PitchDetectionResult;
+import be.tarsos.dsp.pitch.PitchProcessor;
 
 public class DashboardActivity extends AppCompatActivity {
+
+    // ******   Variables  *****
+    Context ctx = this;
+    private static SeekBar seekBarFrequency;
+    private static SeekBar seekBarInterval;
+    private static SeekBar seekBarIntensity;
 
     // ******   Inicialization Rotines  *****
 
@@ -39,6 +56,28 @@ public class DashboardActivity extends AppCompatActivity {
     private void findViews(){
 
     }
+
+    private void setFrequencyController(){
+        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050,1024,0);
+
+        dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, new PitchDetectionHandler() {
+
+            @Override
+            public void handlePitch(PitchDetectionResult pitchDetectionResult,
+                                    AudioEvent audioEvent) {
+                final float pitchInHz = pitchDetectionResult.getPitch();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Use pitchInHz
+                    }
+                });
+
+            }
+        }));
+        new Thread(dispatcher,"Audio Dispatcher").start();
+    }
+
 
 
 }
