@@ -1,6 +1,7 @@
 package com.example.aureobeck.nannyapp;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.io.android.AudioDispatcherFactory;
@@ -31,6 +34,13 @@ public class DashboardActivity extends AppCompatActivity {
     private static TextView textViewIntervalOutput;
     private static TextView textViewIntensityOutput;
 
+    private static Integer currentFrequencyThreshold = 0;
+    private static Integer currentIntervalThreshold = 0;
+    private static Integer currentIntensityThreshold = 0;
+
+    private static Boolean evaluatingFrequency = false;
+    private static Boolean evaluatingIntensity = false;
+
     // ******   Inicialization Rotines  *****
 
     // TODO: STRING
@@ -50,6 +60,7 @@ public class DashboardActivity extends AppCompatActivity {
         findViews();
 
         // *****  Events  *****
+        setFrequencyThreshold();
         setFrequencyController();
 
     }
@@ -88,6 +99,9 @@ public class DashboardActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         textViewFrequencyOutput.setText(pitchInHz+" Hz");
+                        if (pitchInHz > currentFrequencyThreshold && evaluatingFrequency == false) {
+                            textViewFrequencyOutput.setTextColor(getResources().getColor(R.color.red_01));
+                        }
                     }
                 });
             }
@@ -95,6 +109,23 @@ public class DashboardActivity extends AppCompatActivity {
         new Thread(dispatcher,"Audio Dispatcher").start();
     }
 
+    private void setFrequencyThreshold(){
+        seekBarFrequency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                currentFrequencyThreshold = progress*95;
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
 
 }
