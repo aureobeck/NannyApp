@@ -65,7 +65,7 @@
 
             <!-- TODO: String -->
             <TextView
-                android:id="@+id/textViewFrequencyResult"
+                android:id="@+id/textViewFrequencyConfiguration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -85,7 +85,7 @@
                 android:layout_marginRight="5dp"
                 android:progress="80"
                 android:layout_toRightOf="@id/textViewFrequencyTitle"
-                android:layout_toLeftOf="@id/textViewFrequencyResult"/>
+                android:layout_toLeftOf="@id/textViewFrequencyConfiguration"/>
 
         </RelativeLayout>
 
@@ -117,7 +117,7 @@
 
             <!-- TODO: String -->
             <TextView
-                android:id="@+id/textViewIntervalResult"
+                android:id="@+id/textViewIntervalConfiguration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -137,7 +137,7 @@
                 android:layout_marginRight="5dp"
                 android:progress="80"
                 android:layout_toRightOf="@id/textViewIntervalTitle"
-                android:layout_toLeftOf="@id/textViewIntervalResult"/>
+                android:layout_toLeftOf="@id/textViewIntervalConfiguration"/>
 
         </RelativeLayout>
 
@@ -169,7 +169,7 @@
 
             <!-- TODO: String -->
             <TextView
-                android:id="@+id/textViewIntensityResult"
+                android:id="@+id/textViewIntensityConfiguration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -189,9 +189,161 @@
                 android:layout_marginRight="5dp"
                 android:progress="80"
                 android:layout_toRightOf="@id/textViewIntensityTitle"
-                android:layout_toLeftOf="@id/textViewIntensityResult"/>
+                android:layout_toLeftOf="@id/textViewIntensityConfiguration"/>
 
         </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutOutput"
+        android:layout_below="@+id/relativeLayoutConfiguration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginTop="20sp"
+        android:background="@drawable/customborder">
+
+        <!-- TODO: String -->
+        <TextView
+            android:id="@+id/textViewOutputTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Saída"
+            android:textStyle="bold"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="10dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/grey_05"
+            android:textSize="15dp" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutFrequencyOutput"
+            android:layout_below="@+id/textViewOutputTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
+            android:orientation="horizontal">
+
+            <!-- TODO: String -->
+            <TextView
+                android:id="@+id/textViewFrequencyOutputTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="Frequência"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/grey_05"
+                android:textSize="15dp" />
+
+            <!-- TODO: String & Color -->
+            <TextView
+                android:id="@+id/textViewFrequencyOutput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_alignParentRight="true"
+                android:textStyle="bold"
+                android:text="5kHz"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#1B5E20"
+                android:textSize="15dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutIntervalOutput"
+            android:layout_below="@+id/relativeLayoutFrequencyOutput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
+            android:orientation="horizontal">
+
+            <!-- TODO: String -->
+            <TextView
+                android:id="@+id/textViewIntervalOutputTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="Duração"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/grey_05"
+                android:textSize="15dp" />
+
+            <!-- TODO: String & Color-->
+            <TextView
+                android:id="@+id/textViewIntervalOutput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_alignParentRight="true"
+                android:text="60 seg"
+                android:textStyle="bold"
+                android:textColor="#1B5E20"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="15dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutIntensityOutput"
+            android:layout_below="@+id/relativeLayoutIntervalOutput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
+            android:orientation="horizontal">
+
+            <!-- TODO: String -->
+            <TextView
+                android:id="@+id/textViewIntensityOutputTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="Intensidade"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/grey_05"
+                android:textSize="15dp" />
+
+            <!-- TODO: String & Color-->
+            <TextView
+                android:id="@+id/textViewIntensityOutput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_alignParentRight="true"
+                android:text="10dB"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#1B5E20"
+                android:textSize="15dp" />
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
 

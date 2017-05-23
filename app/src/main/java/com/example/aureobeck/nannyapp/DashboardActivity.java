@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.io.android.AudioDispatcherFactory;
@@ -25,6 +22,14 @@ public class DashboardActivity extends AppCompatActivity {
     private static SeekBar seekBarFrequency;
     private static SeekBar seekBarInterval;
     private static SeekBar seekBarIntensity;
+
+    private static TextView textViewFrequencyConfiguration;
+    private static TextView textViewIntervalConfiguration;
+    private static TextView textViewIntensityConfiguration;
+
+    private static TextView textViewFrequencyOutput;
+    private static TextView textViewIntervalOutput;
+    private static TextView textViewIntensityOutput;
 
     // ******   Inicialization Rotines  *****
 
@@ -44,6 +49,9 @@ public class DashboardActivity extends AppCompatActivity {
         // *****   Inicialize Controls  *****
         findViews();
 
+        // *****  Events  *****
+        setFrequencyController();
+
     }
 
     @Override
@@ -54,7 +62,17 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void findViews(){
+        seekBarFrequency = (SeekBar) findViewById(R.id.seekBarFrequency);
+        seekBarIntensity = (SeekBar) findViewById(R.id.seekBarIntensity);
+        seekBarInterval = (SeekBar) findViewById(R.id.seekBarInterval);
 
+        textViewFrequencyConfiguration = (TextView) findViewById(R.id.textViewFrequencyConfiguration);
+        textViewIntervalConfiguration = (TextView) findViewById(R.id.textViewIntervalConfiguration);
+        textViewIntensityConfiguration = (TextView) findViewById(R.id.textViewIntensityConfiguration);
+
+        textViewFrequencyOutput = (TextView) findViewById(R.id.textViewFrequencyOutput);
+        textViewIntervalOutput = (TextView) findViewById(R.id.textViewIntervalOutput);
+        textViewIntensityOutput = (TextView) findViewById(R.id.textViewIntensityOutput);
     }
 
     private void setFrequencyController(){
@@ -69,10 +87,9 @@ public class DashboardActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // Use pitchInHz
+                        textViewFrequencyOutput.setText(pitchInHz+" Hz");
                     }
                 });
-
             }
         }));
         new Thread(dispatcher,"Audio Dispatcher").start();
