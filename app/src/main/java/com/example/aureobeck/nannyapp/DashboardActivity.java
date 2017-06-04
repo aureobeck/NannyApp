@@ -1,15 +1,18 @@
 package com.example.aureobeck.nannyapp;
 
 import android.content.Context;
-import android.os.Handler;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
@@ -20,26 +23,40 @@ import be.tarsos.dsp.pitch.PitchProcessor;
 
 public class DashboardActivity extends AppCompatActivity {
 
-    // ******   Variables  *****
-    Context ctx = this;
+    // ******   Views  *****
+
     private static SeekBar seekBarFrequency;
     private static SeekBar seekBarInterval;
     private static SeekBar seekBarIntensity;
 
-    private static TextView textViewFrequencyConfiguration;
-    private static TextView textViewIntervalConfiguration;
-    private static TextView textViewIntensityConfiguration;
+    private static TextView textViewFrequencyThreshold;
+    private static TextView textViewIntervalThreshold;
+    private static TextView textViewIntensityThreshold;
 
     private static TextView textViewFrequencyOutput;
     private static TextView textViewIntervalOutput;
     private static TextView textViewIntensityOutput;
 
-    private static Integer currentFrequencyThreshold = 0;
-    private static Integer currentIntervalThreshold = 0;
+    private static ProgressBar progressBarResult;
+
+    // ******   Variables  *****
+
+    Context ctx = this;
+
+    private static Integer currentFrequencyThreshold = 5000;
+    private static Integer currentIntervalThreshold = 60;
     private static Integer currentIntensityThreshold = 0;
 
-    private static Boolean evaluatingFrequency = false;
-    private static Boolean evaluatingIntensity = false;
+    private final Long FREQUENCY_EVALUATION_INTERVAL = (long) 5000;
+
+    private static CountDownTimer countDownTimerFrequency;
+    private static CountDownTimer countDownTimerIntensity;
+
+    private static Double currentFrequencyIncrement = 1.0;
+    private static Double currentFrequencyAccumulated = 1.0;
+
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
+
 
     // ******   Inicialization Rotines  *****
 
@@ -60,8 +77,14 @@ public class DashboardActivity extends AppCompatActivity {
         findViews();
 
         // *****  Events  *****
-        setFrequencyThreshold();
-        setFrequencyController();
+        setFrequencyProcessor();
+
+        setIntervalThreshold(currentIntervalThreshold);
+        setFrequencyThreshold(currentFrequencyThreshold/95);
+
+        onFrequencyThresholdSeekBarChanged();
+        onIntervalThresholdSeekBarChanged();
+
 
     }
 
@@ -72,22 +95,24 @@ public class DashboardActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void findViews(){
+    private void findViews() {
         seekBarFrequency = (SeekBar) findViewById(R.id.seekBarFrequency);
         seekBarIntensity = (SeekBar) findViewById(R.id.seekBarIntensity);
         seekBarInterval = (SeekBar) findViewById(R.id.seekBarInterval);
 
-        textViewFrequencyConfiguration = (TextView) findViewById(R.id.textViewFrequencyConfiguration);
-        textViewIntervalConfiguration = (TextView) findViewById(R.id.textViewIntervalConfiguration);
-        textViewIntensityConfiguration = (TextView) findViewById(R.id.textViewIntensityConfiguration);
+        textViewFrequencyThreshold = (TextView) findViewById(R.id.textViewFrequencyConfiguration);
+        textViewIntervalThreshold = (TextView) findViewById(R.id.textViewIntervalConfiguration);
+        textViewIntensityThreshold = (TextView) findViewById(R.id.textViewIntensityConfiguration);
 
         textViewFrequencyOutput = (TextView) findViewById(R.id.textViewFrequencyOutput);
         textViewIntervalOutput = (TextView) findViewById(R.id.textViewIntervalOutput);
         textViewIntensityOutput = (TextView) findViewById(R.id.textViewIntensityOutput);
+
+        progressBarResult = (ProgressBar) findViewById(R.id.progressBarResult);
     }
 
-    private void setFrequencyController(){
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050,1024,0);
+    private void setFrequencyProcessor() {
+        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0);
 
         dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, new PitchDetectionHandler() {
 
@@ -98,22 +123,25 @@ public class DashboardActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        textViewFrequencyOutput.setText(pitchInHz+" Hz");
-                        if (pitchInHz > currentFrequencyThreshold && evaluatingFrequency == false) {
-                            textViewFrequencyOutput.setTextColor(getResources().getColor(R.color.red_01));
-                        }
+                        textViewFrequencyOutput.setText(pitchInHz + " Hz");
+                            if (pitchInHz > currentFrequencyThreshold) {
+                                textViewFrequencyOutput.setTextColor(getResources().getColor(R.color.red_01));
+                                setFrequencyEvaluatingCountDown();
+                            } else {
+                                textViewFrequencyOutput.setTextColor(getResources().getColor(R.color.green_01));
+                            }
                     }
                 });
             }
         }));
-        new Thread(dispatcher,"Audio Dispatcher").start();
+        new Thread(dispatcher, "Audio Dispatcher").start();
     }
 
-    private void setFrequencyThreshold(){
+    private void onFrequencyThresholdSeekBarChanged() {
         seekBarFrequency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                currentFrequencyThreshold = progress*95;
+                setFrequencyThreshold(progress);
             }
 
             @Override
@@ -126,6 +154,58 @@ public class DashboardActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void onIntervalThresholdSeekBarChanged() {
+        seekBarInterval.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                setIntervalThreshold(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    private void setFrequencyThreshold(int progress) {
+        currentFrequencyThreshold = progress * 95;
+        textViewFrequencyThreshold.setText(currentFrequencyThreshold + " Hz");
+    }
+
+    private void setIntervalThreshold(int progress) {
+
+        currentIntervalThreshold = progress;
+        Date date = new Date("(currentFrequencyIncrement * 1000+"));
+//                textViewIntervalThreshold.setText(simpleDateFormat.format(date));
+        textViewIntervalThreshold.setText(currentIntervalThreshold.toString());
+
+        currentFrequencyIncrement = (double) currentIntervalThreshold / 100;
+    }
+
+    private void setFrequencyEvaluatingCountDown() {
+        countDownTimerFrequency = new CountDownTimer(FREQUENCY_EVALUATION_INTERVAL, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Still Crying
+                currentFrequencyAccumulated = currentFrequencyAccumulated+currentFrequencyIncrement;
+                progressBarResult.setProgress(Integer.getInteger(progressBarResult.getProgress()+currentFrequencyIncrement+""));
+            }
+
+            @Override
+            public void onFinish() {
+                // Stoped Crying
+                progressBarResult.setProgress(Integer.getInteger(progressBarResult.getProgress()+currentFrequencyAccumulated+""));
+                currentFrequencyAccumulated = 0.0;
+            }
+        }.start();
     }
 
 }
