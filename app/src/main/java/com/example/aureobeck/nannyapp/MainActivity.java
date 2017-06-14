@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     // ******   Variables  *****
     Context ctx = this;
-    private static Button buttonReceptor;
+    private static Button buttonReceiver;
     private static Button buttonNotifier;
 
     // ******   Inicialization Rotines  *****
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         // *****   Events   *****
         onButtonNotifierClick();
-        onButtonReceptorClick();
+        onButtonReceiverClick();
     }
 
     @Override
@@ -45,26 +45,33 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void findViews(){
-        buttonReceptor = (Button)findViewById(R.id.buttonReceiver);
+    private void findViews() {
+        buttonReceiver = (Button)findViewById(R.id.buttonReceiver);
         buttonNotifier = (Button)findViewById(R.id.buttonNotifier);
     }
 
     // ******   Action Rotines  *****
 
-    private void onButtonNotifierClick(){
+    private void onButtonNotifierClick() {
         buttonNotifier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils utils = new Utils(ctx);
-                utils.showToast("Em breve...", 5);
+                Intent intent = new Intent(MainActivity.this, NotifierActivity.class);
+                startActivity(intent);
             }
         });
     }
 
-    private void onButtonReceptorClick(){
-        Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
-        startActivity(intent);
+    private void onButtonReceiverClick() {
+        buttonReceiver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DashboardActivity
+                        .class);
+                startActivity(intent);
+            }
+        });
     }
+
 
 }
