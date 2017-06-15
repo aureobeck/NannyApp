@@ -19,4 +19,5 @@
     <color name="green_01">#1B5E20</color>
     <color name="red_01">#B71C1C</color>
     <color name="hint_foreground_material_dark">#f36b21</color>
+    <color name="background_grey_01">#d9d6d6</color>
 </resources>
