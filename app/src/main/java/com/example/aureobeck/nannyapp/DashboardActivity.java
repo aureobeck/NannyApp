@@ -1,18 +1,23 @@
 package com.example.aureobeck.nannyapp;
 
 import android.content.Context;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.firebase.client.Firebase;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
@@ -21,7 +26,7 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity implements CountDownTimerSkipFirst.OnFinishedInterface {
 
     // ******   Views  *****
 
@@ -43,20 +48,23 @@ public class DashboardActivity extends AppCompatActivity {
 
     Context ctx = this;
 
-    private static Integer currentFrequencyThreshold = 5000;
-    private static Integer currentIntervalThreshold = 60;
+    private final Long FREQUENCY_EVALUATION_INTERVAL = (long) 5000;
+    private final Integer SAMPLE_RATE = 22050;
+
+    private static Integer currentFrequencyThreshold = 1000;
+    private static Integer currentIntervalThreshold = 5;
     private static Integer currentIntensityThreshold = 0;
 
-    private final Long FREQUENCY_EVALUATION_INTERVAL = (long) 5000;
-
-    private static CountDownTimer countDownTimerFrequency;
+    private static CountDownTimerSkipFirst countDownTimerFrequency;
     private static CountDownTimer countDownTimerIntensity;
 
     private static Double currentFrequencyIncrement = 1.0;
     private static Double currentFrequencyAccumulated = 1.0;
+    private static Integer evaluationAccumulated = 0;
+
 
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
-
+    private Firebase firebaseRef;
 
     // ******   Inicialization Rotines  *****
 
@@ -75,16 +83,22 @@ public class DashboardActivity extends AppCompatActivity {
 
         // *****   Inicialize Controls  *****
         findViews();
+        configureControls();
 
-        // *****  Events  *****
+        // *****   Firebase   *****
+        Firebase.setAndroidContext(this);
+        firebaseRef = new Firebase("https://nanny-app-205da.firebaseio.com/").child("clients").child("1").child("alert");
+        setFirebaseNotification();
+
+        // *****   Inicialize Processing  *****
+        configFrequencyEvaluatingCountDown();
+        setIntervalThreshold(currentIntervalThreshold);
+        setFrequencyThreshold(currentFrequencyThreshold / 95);
         setFrequencyProcessor();
 
-        setIntervalThreshold(currentIntervalThreshold);
-        setFrequencyThreshold(currentFrequencyThreshold/95);
-
+        // *****  Events  *****
         onFrequencyThresholdSeekBarChanged();
         onIntervalThresholdSeekBarChanged();
-
 
     }
 
@@ -111,10 +125,19 @@ public class DashboardActivity extends AppCompatActivity {
         progressBarResult = (ProgressBar) findViewById(R.id.progressBarResult);
     }
 
-    private void setFrequencyProcessor() {
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0);
+    private void configureControls() {
+        seekBarFrequency.setProgress(currentFrequencyThreshold / 95);
+        seekBarInterval.setProgress(currentIntervalThreshold);
+    }
 
-        dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, new PitchDetectionHandler() {
+    private void setFrequencyProcessor() {
+        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(
+                SAMPLE_RATE,
+                1024,
+                0
+        );
+
+        dispatcher.addAudioProcessor(new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, SAMPLE_RATE, 1024, new PitchDetectionHandler() {
 
             @Override
             public void handlePitch(PitchDetectionResult pitchDetectionResult,
@@ -124,12 +147,18 @@ public class DashboardActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         textViewFrequencyOutput.setText(pitchInHz + " Hz");
-                            if (pitchInHz > currentFrequencyThreshold) {
-                                textViewFrequencyOutput.setTextColor(getResources().getColor(R.color.red_01));
+                        if (pitchInHz > currentFrequencyThreshold) {
+                            if (evaluationAccumulated>=5) {
+                                evaluationAccumulated = 0;
                                 setFrequencyEvaluatingCountDown();
                             } else {
-                                textViewFrequencyOutput.setTextColor(getResources().getColor(R.color.green_01));
+                                evaluationAccumulated++;
                             }
+                            textViewFrequencyOutput.setTextColor(getResources().getColor(R.color.red_01));
+
+                        } else {
+                            textViewFrequencyOutput.setTextColor(getResources().getColor(R.color.green_01));
+                        }
                     }
                 });
             }
@@ -183,29 +212,34 @@ public class DashboardActivity extends AppCompatActivity {
     private void setIntervalThreshold(int progress) {
 
         currentIntervalThreshold = progress;
-        Date date = new Date("(currentFrequencyIncrement * 1000+"));
+//        Date date = new Date((currentFrequencyIncrement * 1000+""));
 //                textViewIntervalThreshold.setText(simpleDateFormat.format(date));
         textViewIntervalThreshold.setText(currentIntervalThreshold.toString());
 
-        currentFrequencyIncrement = (double) currentIntervalThreshold / 100;
+        currentFrequencyIncrement = ((double) 1 / (double) 100 * currentIntervalThreshold);
     }
 
     private void setFrequencyEvaluatingCountDown() {
-        countDownTimerFrequency = new CountDownTimer(FREQUENCY_EVALUATION_INTERVAL, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                // Still Crying
-                currentFrequencyAccumulated = currentFrequencyAccumulated+currentFrequencyIncrement;
-                progressBarResult.setProgress(Integer.getInteger(progressBarResult.getProgress()+currentFrequencyIncrement+""));
-            }
-
-            @Override
-            public void onFinish() {
-                // Stoped Crying
-                progressBarResult.setProgress(Integer.getInteger(progressBarResult.getProgress()+currentFrequencyAccumulated+""));
-                currentFrequencyAccumulated = 0.0;
-            }
-        }.start();
+        countDownTimerFrequency.cancel();
+        countDownTimerFrequency.mFirstTick = true;
+        countDownTimerFrequency.start();
+        Log.i("LOG", "START_COUNT");
     }
 
+    private void configFrequencyEvaluatingCountDown() {
+        countDownTimerFrequency = new CountDownTimerSkipFirst(FREQUENCY_EVALUATION_INTERVAL, 250, true, currentFrequencyAccumulated, progressBarResult, currentFrequencyIncrement);
+        countDownTimerFrequency.onFinishedInterface = this;
+    }
+
+    private void setFirebaseNotification() {
+        firebaseRef.setValue("5");
+    }
+
+    @Override
+    public void onFinishedCount() {
+        currentFrequencyAccumulated = 0.0;
+        progressBarResult.setProgress(currentFrequencyAccumulated.intValue());
+        countDownTimerFrequency.cancel();
+        Log.i("LOG", "FINISH_COUNT");
+    }
 }
