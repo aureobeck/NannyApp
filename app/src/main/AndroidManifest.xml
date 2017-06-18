@@ -26,12 +26,12 @@
         </activity>
 
         <activity
-            android:name=".DashboardActivity"
+            android:name=".ReceptorActivity"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
-                <action android:name="com.example.aureobeck.nannyapp.DasboardActivity" />
+                <action android:name="com.example.aureobeck.nannyapp.ReceptorActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
