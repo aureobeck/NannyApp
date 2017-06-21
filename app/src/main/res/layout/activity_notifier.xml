@@ -226,6 +226,20 @@
 
         </RelativeLayout>
 
+        <Button
+            android:id="@+id/buttonDefaultParameters"
+            android:layout_below="@+id/relativeLayoutIntensityConfiguration"
+            android:layout_width="150dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/button_02"
+            android:text="@string/word_reset"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
+
     </RelativeLayout>
 
     <RelativeLayout
