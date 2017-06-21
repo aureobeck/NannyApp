@@ -86,7 +86,7 @@ public class ReceptorActivity extends AppCompatActivity implements CountDownTime
     protected void onCreate(Bundle savedInstanceState) {
         // *****   Inicialize Interface   ******
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notifier);
+        setContentView(R.layout.activity_receptor);
 
         // *****   Action Bar   *****
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);

@@ -48,7 +48,7 @@ public class NotifierActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // *****   Inicialize Interface   ******
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_receiver);
+        setContentView(R.layout.activity_notificator);
 
         // *****   Action Bar   *****
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
