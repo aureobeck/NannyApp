@@ -9,5 +9,6 @@
     <string name="word_help">Ajuda</string>
     <string name="word_ok">Ok</string>
     <string name="word_cancel">Cancelar</string>
+    <string name="word_reset">Resetar</string>
 
 </resources>
