@@ -132,64 +132,12 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/relativeLayoutIntervalConfiguration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/relativeLayoutFrequencyConfiguration"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <!-- TODO: String -->
-                    <TextView
-                        android:id="@+id/textViewIntervalTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="Duração"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/grey_05"
-                        android:textSize="15dp" />
-
-                    <!-- TODO: String -->
-                    <TextView
-                        android:id="@+id/textViewIntervalConfiguration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:text="60 sec"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/grey_05"
-                        android:textSize="15dp" />
-
-                    <SeekBar
-                        android:id="@+id/seekBarInterval"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_toLeftOf="@id/textViewIntervalConfiguration"
-                        android:layout_toRightOf="@id/textViewIntervalTitle"
-                        android:progress="80" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:id="@+id/relativeLayoutIntensityConfiguration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentRight="true"
-                    android:layout_below="@+id/relativeLayoutIntervalConfiguration"
+                    android:layout_below="@+id/relativeLayoutFrequencyConfiguration"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_marginBottom="10dp"
@@ -235,11 +183,63 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutIntervalConfiguration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/relativeLayoutIntensityConfiguration"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewIntervalTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Duração"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewIntervalConfiguration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:text="60 sec"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarInterval"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_toLeftOf="@id/textViewIntervalConfiguration"
+                        android:layout_toRightOf="@id/textViewIntervalTitle"
+                        android:progress="80" />
+
+                </RelativeLayout>
+
                 <Button
                     android:id="@+id/buttonDefaultParameters"
                     android:layout_width="150dp"
                     android:layout_height="35dp"
-                    android:layout_below="@+id/relativeLayoutIntensityConfiguration"
+                    android:layout_below="@+id/relativeLayoutIntervalConfiguration"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="20dp"
@@ -320,53 +320,12 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/relativeLayoutIntervalOutput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/relativeLayoutFrequencyOutput"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <!-- TODO: String -->
-                    <TextView
-                        android:id="@+id/textViewIntervalOutputTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="Duração"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/grey_05"
-                        android:textSize="15dp" />
-
-                    <!-- TODO: String & Color-->
-                    <TextView
-                        android:id="@+id/textViewIntervalOutput"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:text="60 seg"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="#1B5E20"
-                        android:textSize="15dp"
-                        android:textStyle="bold" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:id="@+id/relativeLayoutIntensityOutput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentRight="true"
-                    android:layout_below="@+id/relativeLayoutIntervalOutput"
+                    android:layout_below="@+id/relativeLayoutFrequencyOutput"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_marginBottom="10dp"
@@ -401,6 +360,45 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutIntervalOutput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/relativeLayoutIntensityOutput"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewIntervalOutputTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Duração"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <!-- TODO: String & Color-->
+                    <Chronometer
+                        android:id="@+id/chronometerIntervalOutput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#1B5E20"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
 
             </RelativeLayout>
 
