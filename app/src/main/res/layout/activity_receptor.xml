@@ -12,469 +12,482 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <RelativeLayout
-        android:id="@+id/relativeLayoutConnection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="5dp"
-        android:background="@drawable/custom_border_red"
-        android:orientation="vertical"
-        android:padding="5dp">
-
-        <Switch
-            android:id="@+id/switchConnection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:text="Sem Conexão"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/grey_05"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            android:layout_marginLeft="15dp"/>
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:id="@+id/relativeLayoutConfiguration"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_margin="5dp"
-        android:layout_marginTop="20sp"
-        android:background="@drawable/customborder"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="5dp">
+        android:layout_height="match_parent">
 
-        <!-- TODO: String -->
-        <TextView
-            android:id="@+id/textViewConfigurationTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="15dp"
-            android:text="Configurações"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/grey_05"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/relativeLayoutFrequencyConfiguration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/textViewConfigurationTitle"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <!-- TODO: String -->
-            <TextView
-                android:id="@+id/textViewFrequencyTitle"
+            <RelativeLayout
+                android:id="@+id/relativeLayoutConnection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentLeft="true"
-                android:text="Frequência"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/grey_05"
-                android:textSize="15dp" />
-
-            <!-- TODO: String -->
-            <TextView
-                android:id="@+id/textViewFrequencyConfiguration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:text="5kHz"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/grey_05"
-                android:textSize="15dp" />
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="5dp"
+                android:background="@drawable/custom_border_red"
+                android:orientation="vertical"
+                android:padding="5dp">
 
-            <SeekBar
-                android:id="@+id/seekBarFrequency"
-                android:layout_width="wrap_content"
+                <Switch
+                    android:id="@+id/switchConnection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="Sem Conexão"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/grey_05"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayoutConfiguration"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@id/textViewFrequencyConfiguration"
-                android:layout_toRightOf="@id/textViewFrequencyTitle"
-                android:progress="80" />
+                android:layout_gravity="top"
+                android:layout_margin="5dp"
+                android:layout_marginTop="20sp"
+                android:background="@drawable/customborder"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="5dp">
 
-        </RelativeLayout>
+                <!-- TODO: String -->
+                <TextView
+                    android:id="@+id/textViewConfigurationTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:text="Limites"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/grey_05"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
 
-        <RelativeLayout
-            android:id="@+id/relativeLayoutIntervalConfiguration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/relativeLayoutFrequencyConfiguration"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutFrequencyConfiguration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/textViewConfigurationTitle"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
-            <!-- TODO: String -->
-            <TextView
-                android:id="@+id/textViewIntervalTitle"
-                android:layout_width="wrap_content"
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewFrequencyTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Frequência"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewFrequencyConfiguration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:text="5kHz"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarFrequency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_toLeftOf="@id/textViewFrequencyConfiguration"
+                        android:layout_toRightOf="@id/textViewFrequencyTitle"
+                        android:progress="80" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutIntervalConfiguration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/relativeLayoutFrequencyConfiguration"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewIntervalTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Duração"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewIntervalConfiguration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:text="60 sec"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarInterval"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_toLeftOf="@id/textViewIntervalConfiguration"
+                        android:layout_toRightOf="@id/textViewIntervalTitle"
+                        android:progress="80" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutIntensityConfiguration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/relativeLayoutIntervalConfiguration"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewIntensityTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Intensidade"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewIntensityConfiguration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:text="10 dB"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <SeekBar
+                        android:id="@+id/seekBarIntensity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_toLeftOf="@id/textViewIntensityConfiguration"
+                        android:layout_toRightOf="@id/textViewIntensityTitle"
+                        android:progress="80" />
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/buttonDefaultParameters"
+                    android:layout_width="150dp"
+                    android:layout_height="35dp"
+                    android:layout_below="@+id/relativeLayoutIntensityConfiguration"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/button_02"
+                    android:text="@string/word_reset"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayoutOutput"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="Duração"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/grey_05"
-                android:textSize="15dp" />
+                android:layout_below="@+id/relativeLayoutConfiguration"
+                android:layout_gravity="top"
+                android:layout_margin="5dp"
+                android:layout_marginTop="20sp"
+                android:background="@drawable/customborder"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="5dp">
 
-            <!-- TODO: String -->
-            <TextView
-                android:id="@+id/textViewIntervalConfiguration"
-                android:layout_width="wrap_content"
+                <!-- TODO: String -->
+                <TextView
+                    android:id="@+id/textViewOutputTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:text="Saída"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/grey_05"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutFrequencyOutput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/textViewOutputTitle"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewFrequencyOutputTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Frequência"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <!-- TODO: String & Color -->
+                    <TextView
+                        android:id="@+id/textViewFrequencyOutput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:text="5kHz"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#1B5E20"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutIntervalOutput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/relativeLayoutFrequencyOutput"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewIntervalOutputTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Duração"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <!-- TODO: String & Color-->
+                    <TextView
+                        android:id="@+id/textViewIntervalOutput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:text="60 seg"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#1B5E20"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutIntensityOutput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/relativeLayoutIntervalOutput"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <!-- TODO: String -->
+                    <TextView
+                        android:id="@+id/textViewIntensityOutputTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Intensidade"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
+
+                    <!-- TODO: String & Color-->
+                    <TextView
+                        android:id="@+id/textViewIntensityOutput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:text="10dB"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#1B5E20"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayoutResult"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:text="60 sec"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/grey_05"
-                android:textSize="15dp" />
+                android:layout_gravity="top"
+                android:layout_margin="5dp"
+                android:layout_marginTop="20sp"
+                android:background="@drawable/customborder"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="5dp">
 
-            <SeekBar
-                android:id="@+id/seekBarInterval"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@id/textViewIntervalConfiguration"
-                android:layout_toRightOf="@id/textViewIntervalTitle"
-                android:progress="80" />
+                <!-- TODO: String -->
+                <TextView
+                    android:id="@+id/textViewResultTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:text="Resultado"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/grey_05"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutFrequencyResult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/textViewResultTitle"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
-        <RelativeLayout
-            android:id="@+id/relativeLayoutIntensityConfiguration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/relativeLayoutIntervalConfiguration"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+                    <!-- TODO: String -->
+                    <ImageView
+                        android:id="@+id/imageViewResultHappy"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentLeft="true"
+                        android:background="@mipmap/happy_icon"
+                        android:text="Frequência"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
 
-            <!-- TODO: String -->
-            <TextView
-                android:id="@+id/textViewIntensityTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="Intensidade"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/grey_05"
-                android:textSize="15dp" />
+                    <!-- TODO: String -->
+                    <ImageView
+                        android:id="@+id/imageViewResultSad"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:background="@mipmap/sad_icon"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/grey_05"
+                        android:textSize="15dp" />
 
-            <!-- TODO: String -->
-            <TextView
-                android:id="@+id/textViewIntensityConfiguration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:text="10 dB"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/grey_05"
-                android:textSize="15dp" />
+                    <ProgressBar
+                        android:id="@+id/progressBarResult"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/imageViewResultSad"
+                        android:layout_toRightOf="@id/imageViewResultHappy"
+                        android:progress="0" />
 
-            <SeekBar
-                android:id="@+id/seekBarIntensity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@id/textViewIntensityConfiguration"
-                android:layout_toRightOf="@id/textViewIntensityTitle"
-                android:progress="80" />
+                </RelativeLayout>
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <Button
-            android:id="@+id/buttonDefaultParameters"
-            android:layout_below="@+id/relativeLayoutIntensityConfiguration"
-            android:layout_width="150dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/button_02"
-            android:text="@string/word_reset"
-            android:textColor="@color/white"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"/>
+        </LinearLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/relativeLayoutOutput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayoutConfiguration"
-        android:layout_gravity="top"
-        android:layout_margin="5dp"
-        android:layout_marginTop="20sp"
-        android:background="@drawable/customborder"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="5dp">
-
-        <!-- TODO: String -->
-        <TextView
-            android:id="@+id/textViewOutputTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="15dp"
-            android:text="Saída"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/grey_05"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-
-        <RelativeLayout
-            android:id="@+id/relativeLayoutFrequencyOutput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/textViewOutputTitle"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <!-- TODO: String -->
-            <TextView
-                android:id="@+id/textViewFrequencyOutputTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="Frequência"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/grey_05"
-                android:textSize="15dp" />
-
-            <!-- TODO: String & Color -->
-            <TextView
-                android:id="@+id/textViewFrequencyOutput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:text="5kHz"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#1B5E20"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/relativeLayoutIntervalOutput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/relativeLayoutFrequencyOutput"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <!-- TODO: String -->
-            <TextView
-                android:id="@+id/textViewIntervalOutputTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="Duração"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/grey_05"
-                android:textSize="15dp" />
-
-            <!-- TODO: String & Color-->
-            <TextView
-                android:id="@+id/textViewIntervalOutput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:text="60 seg"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#1B5E20"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/relativeLayoutIntensityOutput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/relativeLayoutIntervalOutput"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <!-- TODO: String -->
-            <TextView
-                android:id="@+id/textViewIntensityOutputTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="Intensidade"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/grey_05"
-                android:textSize="15dp" />
-
-            <!-- TODO: String & Color-->
-            <TextView
-                android:id="@+id/textViewIntensityOutput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:text="10dB"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#1B5E20"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/relativeLayoutResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_margin="5dp"
-        android:layout_marginTop="20sp"
-        android:background="@drawable/customborder"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="5dp">
-
-        <!-- TODO: String -->
-        <TextView
-            android:id="@+id/textViewResultTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="15dp"
-            android:text="Resultado"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/grey_05"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-
-        <RelativeLayout
-            android:id="@+id/relativeLayoutFrequencyResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/textViewResultTitle"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <!-- TODO: String -->
-            <ImageView
-                android:id="@+id/imageViewResultHappy"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_alignParentLeft="true"
-                android:background="@mipmap/happy_icon"
-                android:text="Frequência"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/grey_05"
-                android:textSize="15dp" />
-
-            <!-- TODO: String -->
-            <ImageView
-                android:id="@+id/imageViewResultSad"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:background="@mipmap/sad_icon"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/grey_05"
-                android:textSize="15dp" />
-
-            <ProgressBar
-                android:id="@+id/progressBarResult"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/imageViewResultSad"
-                android:layout_toRightOf="@id/imageViewResultHappy"
-                android:progress="0" />
-
-        </RelativeLayout>
-
-    </RelativeLayout>
+    </ScrollView>
 
 </LinearLayout>
