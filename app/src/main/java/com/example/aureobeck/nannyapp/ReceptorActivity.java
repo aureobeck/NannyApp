@@ -2,7 +2,6 @@ package com.example.aureobeck.nannyapp;
 
 import android.content.Context;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import android.content.SharedPreferences;
@@ -64,22 +63,29 @@ public class ReceptorActivity extends AppCompatActivity {
 
     Context ctx = this;
 
-    private final Long FREQUENCY_EVALUATION_INTERVAL = (long) 3000;
+    private final Long FREQUENCY_EVALUATION_INTERVAL = (long) 8000;
+
+    private final int FREQUENCY_THRESHOLD_DEFAULT = 600;
+    private final int INTENSITY_THRESHOLD_DEFAULT = -50;
+    private final int FREQUENCY_EVALUATION_INT = 15;
+
     private final Integer SAMPLE_RATE = 22050;
 
-    private static Integer currentFrequencyThreshold = 1000;
-    private static Integer currentIntervalThreshold = 10;
-    private static Integer currentIntensityThreshold = 0;
+    private static Integer currentFrequencyThreshold = 600;
+    private static Integer currentIntensityThreshold = -50;
+    private static Integer currentIntervalThreshold = 20;
 
     private static CountDownTimer countDownTimer;
-    private static long currentChronometerValue;
+    private static long currentChronometerValue = 0;
 
     private static Double currentIncrement = 1.0;
+    private static Double currentAccumulator = 0.0;
 
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
     private static Firebase firebaseRef;
     private static AudioDispatcher dispatcher;
     private static SilenceDetector silenceDetector;
+
+    private static boolean isChronometerRunning = false;
 
     // ******   Inicialization Methods  *****
 
@@ -104,19 +110,19 @@ public class ReceptorActivity extends AppCompatActivity {
         configureControls();
 
         // *****   Inicialize Processing  *****
-        configFrequencyEvaluatingCountDown();
+        setFrequencyEvaluatingCountDown();
         setIntervalThreshold(currentIntervalThreshold);
-        setIntensityThreshold(currentIntensityThreshold);
+        setIntensityThreshold(-currentIntensityThreshold);
         setFrequencyThreshold(currentFrequencyThreshold / 95);
         setDispatcher();
         setIntensityProcessor();
         setFrequencyProcessor();
 
         // *****  Events  *****
+        onConnectionSwitchPressed();
         onFrequencyThresholdSeekBarChanged();
         onIntensityThresholdSeekBarChanged();
         onIntervalThresholdSeekBarChanged();
-        onConnectionSwitchPressed();
         onChronometerTick();
 
     }
@@ -160,7 +166,9 @@ public class ReceptorActivity extends AppCompatActivity {
         }
 
         seekBarFrequency.setProgress(currentFrequencyThreshold / 95);
+        seekBarIntensity.setProgress(-currentIntensityThreshold);
         seekBarInterval.setProgress(currentIntervalThreshold);
+
     }
 
     // ******   DSP Methods  *****
@@ -190,16 +198,9 @@ public class ReceptorActivity extends AppCompatActivity {
                         if (intensityInDb > currentIntensityThreshold) {
                             textViewIntensityOutput.setTextColor(getResources().getColor(R.color.red_01));
                             if (pitchInHz > currentFrequencyThreshold) {
-                                // Is Crying - frequency and intensity greater than threshold)
+                                // Is Crying - frequency and intensity greater than threshold
                                 startChronometer();
-                                Log.i("LOG", "START_CHRONOMETER");
                                 resetEvaluatingCountDown();
-                                Log.i("LOG", "START_COUNT_DOWN");
-
-                            } else {
-                                // Not Crying at the moment
-                                stopChronometer();
-                                Log.i("LOG", "STOP_CHRONOMETER");
                             }
                         } else {
                             textViewIntensityOutput.setTextColor(getResources().getColor(R.color.green_01));
@@ -225,17 +226,21 @@ public class ReceptorActivity extends AppCompatActivity {
     // ******  Chronometer  Methods  *****
 
     private void startChronometer() {
-        chronometerIntervalOutput.setBase(SystemClock.elapsedRealtime()-currentChronometerValue);
-        chronometerIntervalOutput.start();
+        if (!isChronometerRunning) {
+            chronometerIntervalOutput.setBase(SystemClock.elapsedRealtime()-currentChronometerValue);
+            chronometerIntervalOutput.start();
+            isChronometerRunning = true;
+        }
     }
 
     private void stopChronometer() {
-        currentChronometerValue = SystemClock.elapsedRealtime()- chronometerIntervalOutput.getBase();
+        currentChronometerValue = SystemClock.elapsedRealtime() - chronometerIntervalOutput.getBase();
         chronometerIntervalOutput.stop();
+        isChronometerRunning = false;
     }
 
     private void resetChronometer() {
-        currentChronometerValue=0;
+        currentChronometerValue = 0;
         chronometerIntervalOutput.setBase(SystemClock.elapsedRealtime());
         chronometerIntervalOutput.stop();
     }
@@ -244,13 +249,21 @@ public class ReceptorActivity extends AppCompatActivity {
         chronometerIntervalOutput.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
-                Double currentProgress = (double) chronometer.getBase()*currentIncrement;
-                progressBarResult.setProgress((int) SystemClock.elapsedRealtime() - currentProgress.intValue());
-                Log.i("LOG", "INCREMENT_CURRENT_BASE :" +chronometer.getBase());
+                currentAccumulator = (double)currentAccumulator+(double) currentIncrement;
+                progressBarResult.setProgress(currentAccumulator.intValue());
                 Log.i("LOG", "INCREMENT_CURRENT_INCREMENT :" +currentIncrement);
-                Log.i("LOG", "INCREMENT_CURRENT_PROGRESS :" +currentProgress.intValue());
+                Log.i("LOG", "INCREMENT_CURRENT_ACCUMULATOR :" +currentAccumulator);
+                Log.i("LOG", "INCREMENT_CURRENT_PROGRESS :" +progressBarResult.getProgress());
+
+                if ((SystemClock.elapsedRealtime() - chronometer.getBase())>=(currentIntervalThreshold*1000)) {
+                    onChronometerFinish();
+                }
             }
         });
+    }
+
+    private void onChronometerFinish() {
+        firebaseRef.setValue("1");
     }
 
     // ******   Action Methods  *****
@@ -264,8 +277,10 @@ public class ReceptorActivity extends AppCompatActivity {
                     switchConnection.setText("Sem conexão");
                 } else {
                     if (getSharedPreferencesFirebaseWriteId().equals("")) {
+                        // No id saved, a new one will be created
                         setNewFirebaseId();
                     } else {
+                        // Gets the id saved and turns the connection on
                         setFirebaseConnectionOn();
                     }
                 }
@@ -330,9 +345,15 @@ public class ReceptorActivity extends AppCompatActivity {
         });
     }
 
-    public void resetNotCrying() {
-        progressBarResult.setProgress(0);
+    private void onResetButtonClick() {
+
+    }
+
+    private void resetNotCrying() {
+        stopChronometer();
         resetChronometer();
+        progressBarResult.setProgress(0);
+        currentAccumulator = 0.0;
         countDownTimer.cancel();
         Log.i("LOG", "FINISH_COUNT");
     }
@@ -395,12 +416,7 @@ public class ReceptorActivity extends AppCompatActivity {
     private void setIntervalThreshold(int progress) {
         currentIntervalThreshold = progress;
         textViewIntervalThreshold.setText(currentIntervalThreshold.toString());
-        currentIncrement = (((double) 1 / ((double) 10 * currentIntervalThreshold)));
-    }
-
-    private void resetEvaluatingCountDown() {
-        countDownTimer.cancel();
-        countDownTimer.start();
+        currentIncrement = (((double) 100 / ((double) currentIntervalThreshold)));
     }
 
     private void setIntensityThreshold (int progress) {
@@ -408,7 +424,7 @@ public class ReceptorActivity extends AppCompatActivity {
         textViewIntensityThreshold.setText(currentIntensityThreshold.toString());
     }
 
-    private void configFrequencyEvaluatingCountDown() {
+    private void setFrequencyEvaluatingCountDown() {
         countDownTimer = new CountDownTimer(FREQUENCY_EVALUATION_INTERVAL, 1000) {
             public void onTick(long millisUntilFinished) {
             }
@@ -419,20 +435,12 @@ public class ReceptorActivity extends AppCompatActivity {
         }.start();
     }
 
-    // ******   General Methods  *****
-
-    public void showToast(String message, Integer length) {
-        final Toast toast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
-        toast.show();
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                toast.cancel();
-            }
-        }, length);
+    private void resetEvaluatingCountDown() {
+        countDownTimer.cancel();
+        countDownTimer.start();
     }
+
+    // ******   General Methods  *****
 
     private void saveToPreferences(Context context, String preferenceName, String preferenceValue, String preferenceFile) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFile, Context.MODE_PRIVATE);
