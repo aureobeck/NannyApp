@@ -21,6 +21,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -35,6 +36,7 @@ public class NotifierActivity extends AppCompatActivity {
     private static TextView textViewSwitch;
     private static TextView textViewStatus;
     private static ImageView imageViewStatus;
+    private static ChildEventListener childEventListener;
 
 
     // ******   Variables  *****
@@ -66,8 +68,6 @@ public class NotifierActivity extends AppCompatActivity {
         // *****   Events   *****
         onConnectionSwitchPressed();
         onTextViewConnectionClick();
-        setControlsNoConnection();
-
     }
 
     @Override
@@ -90,12 +90,9 @@ public class NotifierActivity extends AppCompatActivity {
 
     // TODO: String
     private void configureControls() {
+        setChildEventListener();
         if (getSharedPreferencesFirebaseReadId().equals("")) {
-            textViewStatus.setText("Sem Conexão!");
-            imageViewStatus.setBackgroundResource(R.mipmap.dead_icon);
-            relativeLayoutConnection.setBackgroundResource(R.drawable.custom_border_red);
-            textViewSwitch.setText("Sem Conexão");
-            switchConnection.setChecked(false);
+            setControlsNoConnection();
         } else {
             // TODO: Check Connection
             connectFirebase();
@@ -106,7 +103,7 @@ public class NotifierActivity extends AppCompatActivity {
     // ******   Action Methods  *****
 
     private void onTextViewConnectionClick() {
-        textViewStatus.setOnClickListener(new View.OnClickListener() {
+        textViewSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getSharedPreferencesFirebaseReadId().equals("")) {
@@ -172,7 +169,8 @@ public class NotifierActivity extends AppCompatActivity {
         textViewDescription.setText("Por favor digite o código de conexão");
 
         final EditText editTextCode = (EditText) dialogNewConnection.findViewById(R.id.editText);
-        editTextCode.setText(getSharedPreferencesFirebaseReadId());
+        Integer currentId = 54321 - Integer.parseInt(getSharedPreferencesFirebaseReadId());
+        editTextCode.setText(currentId.toString());
 
         final Button buttonOk = (Button) dialogNewConnection.findViewById(R.id.buttonOk);
         buttonOk.setText("Ok");
@@ -185,6 +183,7 @@ public class NotifierActivity extends AppCompatActivity {
                     Integer readCode = 54321 - Integer.parseInt(editTextCode.getText().toString());
                     saveSharedPreferencesFirebaseReadId(readCode.toString());
                     setControlsConnectionOk();
+                    connectFirebase();
                     dialogNewConnection.cancel();
                     hideKeyboard();
                 }
@@ -227,6 +226,7 @@ public class NotifierActivity extends AppCompatActivity {
                 } else {
                     Integer readCode = 54321 - Integer.parseInt(editTextCode.getText().toString());
                     saveSharedPreferencesFirebaseReadId(readCode.toString());
+                    connectFirebase();
                     setControlsConnectionOk();
                     dialogNewConnection.cancel();
                     hideKeyboard();
@@ -267,7 +267,12 @@ public class NotifierActivity extends AppCompatActivity {
     }
 
     private void onFirebaseChildEvent() {
-        firebaseRef.addChildEventListener(new com.firebase.client.ChildEventListener() {
+        firebaseRef.removeEventListener(childEventListener);
+        firebaseRef.addChildEventListener(childEventListener);
+    }
+
+    private void setChildEventListener() {
+       childEventListener =  new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
@@ -294,7 +299,7 @@ public class NotifierActivity extends AppCompatActivity {
             @Override
             public void onCancelled(FirebaseError firebaseError) {
             }
-        });
+        };
     }
 
     // ******   General Methods  *****
@@ -323,10 +328,15 @@ public class NotifierActivity extends AppCompatActivity {
             public void onClick(View v) {
                 stopVibrator(vibrator);
                 configControlsBabyNotCrying();
+                resetFirebaseValue();
                 dialogNotifier.cancel();
             }
         });
 
+    }
+
+    private void resetFirebaseValue() {
+        firebaseRef.setValue("0");
     }
 
     private void startVibrator(Vibrator vibrator) {
