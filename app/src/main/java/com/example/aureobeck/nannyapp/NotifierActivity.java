@@ -38,7 +38,6 @@ public class NotifierActivity extends AppCompatActivity {
     private static ImageView imageViewStatus;
     private static ChildEventListener childEventListener;
 
-
     // ******   Variables  *****
     Context ctx = this;
     private static Firebase firebaseRef;
@@ -131,6 +130,8 @@ public class NotifierActivity extends AppCompatActivity {
         });
     }
 
+    // ******   Config Methods  *****
+
     private void setControlsNoConnection() {
         textViewStatus.setText("Sem Conexão!");
         imageViewStatus.setBackgroundResource(R.mipmap.dead_icon);
@@ -147,12 +148,6 @@ public class NotifierActivity extends AppCompatActivity {
 
         Integer readCode = 54321 - Integer.parseInt(getSharedPreferencesFirebaseReadId());
         textViewSwitch.setText("Conectado - Id: " + readCode);
-    }
-
-    // TODO: Disconnect Firebase
-    private void connectFirebase() {
-        firebaseRef = new Firebase("https://nanny-app-205da.firebaseio.com/").child("clients").child(getSharedPreferencesFirebaseReadId());
-        onFirebaseChildEvent();
     }
 
     private void openEditConnectionDialog() {
@@ -200,51 +195,6 @@ public class NotifierActivity extends AppCompatActivity {
         });
     }
 
-    private void openNewConnectionDialog() {
-        final Dialog dialogNewConnection = new Dialog(ctx);
-        dialogNewConnection.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogNewConnection.setContentView(R.layout.dialog_one_button_edit_text);
-        dialogNewConnection.show();
-        dialogNewConnection.setCancelable(false);
-
-        final TextView textViewTitle = (TextView) dialogNewConnection.findViewById(R.id.textViewTitle);
-        textViewTitle.setText("Nova Conexão");
-
-        final TextView textViewDescription = (TextView) dialogNewConnection.findViewById(R.id.textViewDescription);
-        textViewDescription.setText("Por favor digite o código de conexão");
-
-        final EditText editTextCode = (EditText) dialogNewConnection.findViewById(R.id.editText);
-        editTextCode.setHint("Código");
-
-        final Button buttonOk = (Button) dialogNewConnection.findViewById(R.id.buttonOk);
-        buttonOk.setText("Ok");
-        buttonOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (editTextCode.getText().toString().equals("")) {
-                    showToast("Por favor, insira um código válido!", 3000);
-                } else {
-                    Integer readCode = 54321 - Integer.parseInt(editTextCode.getText().toString());
-                    saveSharedPreferencesFirebaseReadId(readCode.toString());
-                    connectFirebase();
-                    setControlsConnectionOk();
-                    dialogNewConnection.cancel();
-                    hideKeyboard();
-                }
-            }
-        });
-
-        final Button buttonCancel = (Button) dialogNewConnection.findViewById(R.id.buttonCancel);
-        buttonCancel.setText("Cancelar");
-        buttonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideKeyboard();
-                dialogNewConnection.cancel();
-            }
-        });
-    }
-
     private void configControlsBabyNotCrying() {
         textViewStatus.setText("Está tudo bem!");
         imageViewStatus.setBackgroundResource(R.mipmap.happy_icon);
@@ -257,6 +207,12 @@ public class NotifierActivity extends AppCompatActivity {
     }
 
     // ******   Firebase Methods  *****
+
+    // TODO: Disconnect Firebase
+    private void connectFirebase() {
+        firebaseRef = new Firebase("https://nanny-app-205da.firebaseio.com/").child("clients").child(getSharedPreferencesFirebaseReadId());
+        onFirebaseChildEvent();
+    }
 
     private String getSharedPreferencesFirebaseReadId() {
         return readFromPreferences(ctx, "firebaseCodeRead", "", "userConfig");
@@ -280,8 +236,8 @@ public class NotifierActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                String valueRetrived = dataSnapshot.getValue(String.class);
-                if (valueRetrived.equals("1")) {
+                String valueAlert = dataSnapshot.getValue(String.class);
+                if (valueAlert.equals("1")) {
                     configControlsBabyCrying();
                 } else {
                     configControlsBabyNotCrying();
@@ -328,15 +284,56 @@ public class NotifierActivity extends AppCompatActivity {
             public void onClick(View v) {
                 stopVibrator(vibrator);
                 configControlsBabyNotCrying();
-                resetFirebaseValue();
+                firebaseRef.setValue("0");
                 dialogNotifier.cancel();
             }
         });
 
     }
 
-    private void resetFirebaseValue() {
-        firebaseRef.setValue("0");
+    private void openNewConnectionDialog() {
+        final Dialog dialogNewConnection = new Dialog(ctx);
+        dialogNewConnection.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogNewConnection.setContentView(R.layout.dialog_one_button_edit_text);
+        dialogNewConnection.show();
+        dialogNewConnection.setCancelable(false);
+
+        final TextView textViewTitle = (TextView) dialogNewConnection.findViewById(R.id.textViewTitle);
+        textViewTitle.setText("Nova Conexão");
+
+        final TextView textViewDescription = (TextView) dialogNewConnection.findViewById(R.id.textViewDescription);
+        textViewDescription.setText("Por favor digite o código de conexão");
+
+        final EditText editTextCode = (EditText) dialogNewConnection.findViewById(R.id.editText);
+        editTextCode.setHint("Código");
+
+        final Button buttonOk = (Button) dialogNewConnection.findViewById(R.id.buttonOk);
+        buttonOk.setText("Ok");
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (editTextCode.getText().toString().equals("")) {
+                    showToast("Por favor, insira um código válido!", 3000);
+                } else {
+                    Integer readCode = 54321 - Integer.parseInt(editTextCode.getText().toString());
+                    saveSharedPreferencesFirebaseReadId(readCode.toString());
+                    connectFirebase();
+                    setControlsConnectionOk();
+                    dialogNewConnection.cancel();
+                    hideKeyboard();
+                }
+            }
+        });
+
+        final Button buttonCancel = (Button) dialogNewConnection.findViewById(R.id.buttonCancel);
+        buttonCancel.setText("Cancelar");
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideKeyboard();
+                dialogNewConnection.cancel();
+            }
+        });
     }
 
     private void startVibrator(Vibrator vibrator) {
