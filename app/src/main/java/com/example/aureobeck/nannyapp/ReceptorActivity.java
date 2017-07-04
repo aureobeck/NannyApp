@@ -111,14 +111,13 @@ public class ReceptorActivity extends AppCompatActivity {
         configureControls();
 
         // *****   Inicialize Processing  *****
-        //setFrequencyEvaluatingCountDown();
+        setFrequencyEvaluatingCountDown();
         setIntervalThreshold(currentIntervalThreshold);
         setIntensityThreshold(-currentIntensityThreshold);
         setFrequencyThreshold(currentFrequencyThreshold / 95);
-        //setDispatcher();
-        //setIntensityProcessor();
-        //setFrequencyProcessor();
-        setTestResults();
+        setDispatcher();
+        setIntensityProcessor();
+        setFrequencyProcessor();
 
         // *****  Events  *****
         onConnectionSwitchPressed();
@@ -251,11 +250,11 @@ public class ReceptorActivity extends AppCompatActivity {
         chronometerIntervalOutput.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
-//                currentAccumulator += currentIncrement;
-//                progressBarResult.setProgress(currentAccumulator.intValue());
-//                if ((SystemClock.elapsedRealtime() - chronometer.getBase()) >= (currentIntervalThreshold*1000)) {
-//                    firebaseRef.setValue("1");
-//                }
+                currentAccumulator += currentIncrement;
+                progressBarResult.setProgress(currentAccumulator.intValue());
+                if ((SystemClock.elapsedRealtime() - chronometer.getBase()) >= (currentIntervalThreshold*1000) && firebaseRef != null) {
+                    firebaseRef.setValue("1");
+                }
             }
         });
     }
