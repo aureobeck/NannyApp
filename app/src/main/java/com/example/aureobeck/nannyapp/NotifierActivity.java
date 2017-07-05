@@ -40,7 +40,8 @@ public class NotifierActivity extends AppCompatActivity {
 
     // ******   Variables  *****
     Context ctx = this;
-    private static Firebase firebaseRef;
+    private static Firebase firebaseReferenceRead;
+    private static Firebase firebaseReferenceWrite;
 
     // ******   Inicialization Methods  *****
 
@@ -210,7 +211,8 @@ public class NotifierActivity extends AppCompatActivity {
 
     // TODO: Disconnect Firebase
     private void connectFirebase() {
-        firebaseRef = new Firebase("https://nanny-app-205da.firebaseio.com/").child("clients").child(getSharedPreferencesFirebaseReadId());
+        firebaseReferenceRead = new Firebase("https://nanny-app-205da.firebaseio.com/").child("clients").child(getSharedPreferencesFirebaseReadId());
+        firebaseReferenceWrite = new Firebase("https://nanny-app-205da.firebaseio.com/").child("clients").child(getSharedPreferencesFirebaseReadId()).child("alert");
         onFirebaseChildEvent();
     }
 
@@ -223,8 +225,8 @@ public class NotifierActivity extends AppCompatActivity {
     }
 
     private void onFirebaseChildEvent() {
-        firebaseRef.removeEventListener(childEventListener);
-        firebaseRef.addChildEventListener(childEventListener);
+        firebaseReferenceRead.removeEventListener(childEventListener);
+        firebaseReferenceRead.addChildEventListener(childEventListener);
     }
 
     private void setChildEventListener() {
@@ -284,7 +286,7 @@ public class NotifierActivity extends AppCompatActivity {
             public void onClick(View v) {
                 stopVibrator(vibrator);
                 configControlsBabyNotCrying();
-                firebaseRef.setValue("0");
+                firebaseReferenceWrite.setValue("0");
                 dialogNotifier.cancel();
             }
         });
