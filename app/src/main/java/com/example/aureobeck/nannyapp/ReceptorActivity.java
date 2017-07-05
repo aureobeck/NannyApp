@@ -7,7 +7,6 @@ import java.util.Random;
 
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,13 +15,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.aureobeck.nannyapp.Utils.FirebaseClient;
 import com.firebase.client.DataSnapshot;
@@ -59,22 +58,22 @@ public class ReceptorActivity extends AppCompatActivity {
     private static TextView textViewIntensityOutput;
 
     private static ProgressBar progressBarResult;
+    private static Button buttonDefaultParameters;
 
     // ******   Variables  *****
 
     Context ctx = this;
 
-    private final Long FREQUENCY_EVALUATION_INTERVAL = (long) 8000;
+    private static final int FREQUENCY_THRESHOLD_DEFAULT = 400;
+    private static final int INTENSITY_THRESHOLD_DEFAULT = -60;
+    private static final int INTERVAL_THRESHOLD_DEFAULT = 10;
 
-    private final int FREQUENCY_THRESHOLD_DEFAULT = 600;
-    private final int INTENSITY_THRESHOLD_DEFAULT = -50;
-    private final int FREQUENCY_EVALUATION_INT = 15;
+    private static final Long FREQUENCY_EVALUATION_INTERVAL = (long) 5000;
+    private static final Integer SAMPLE_RATE = 22050;
 
-    private final Integer SAMPLE_RATE = 22050;
-
-    private static Integer currentFrequencyThreshold = 600;
-    private static Integer currentIntensityThreshold = -50;
-    private static Integer currentIntervalThreshold = 20;
+    private static Integer currentFrequencyThreshold = FREQUENCY_THRESHOLD_DEFAULT;
+    private static Integer currentIntensityThreshold = INTENSITY_THRESHOLD_DEFAULT;
+    private static Integer currentIntervalThreshold = INTERVAL_THRESHOLD_DEFAULT;
 
     private static CountDownTimer countDownTimer;
     private static long currentChronometerValue = 0;
@@ -112,9 +111,7 @@ public class ReceptorActivity extends AppCompatActivity {
 
         // *****   Inicialize Processing  *****
         setFrequencyEvaluatingCountDown();
-        setIntervalThreshold(currentIntervalThreshold);
-        setIntensityThreshold(-currentIntensityThreshold);
-        setFrequencyThreshold(currentFrequencyThreshold / 95);
+        resetDefaultParameters();
         setDispatcher();
         setIntensityProcessor();
         setFrequencyProcessor();
@@ -124,6 +121,7 @@ public class ReceptorActivity extends AppCompatActivity {
         onFrequencyThresholdSeekBarChanged();
         onIntensityThresholdSeekBarChanged();
         onIntervalThresholdSeekBarChanged();
+        onResetParametersButtonClick();
         onChronometerTick();
 
     }
@@ -152,6 +150,7 @@ public class ReceptorActivity extends AppCompatActivity {
         chronometerIntervalOutput = (Chronometer) findViewById(R.id.chronometerIntervalOutput);
 
         progressBarResult = (ProgressBar) findViewById(R.id.progressBarResult);
+        buttonDefaultParameters = (Button) findViewById(R.id.buttonDefaultParameters);
     }
 
     private void configureControls() {
@@ -254,6 +253,7 @@ public class ReceptorActivity extends AppCompatActivity {
                 progressBarResult.setProgress(currentAccumulator.intValue());
                 if ((SystemClock.elapsedRealtime() - chronometer.getBase()) >= (currentIntervalThreshold*1000) && firebaseRef != null) {
                     firebaseRef.setValue("1");
+                    resetNotCrying();
                 }
             }
         });
@@ -285,8 +285,7 @@ public class ReceptorActivity extends AppCompatActivity {
         seekBarFrequency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                setFrequencyThreshold(progress);
-                setTestResults();
+                setFrequencyThreshold((double)progress);
             }
 
             @Override
@@ -306,7 +305,6 @@ public class ReceptorActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 setIntensityThreshold(progress);
-                setTestResults();
             }
 
             @Override
@@ -340,7 +338,13 @@ public class ReceptorActivity extends AppCompatActivity {
         });
     }
 
-    private void onResetButtonClick() {
+    private void onResetParametersButtonClick() {
+        buttonDefaultParameters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetDefaultParameters();
+            }
+        });
     }
 
     private void resetNotCrying() {
@@ -402,20 +406,21 @@ public class ReceptorActivity extends AppCompatActivity {
 
     // ******   Config Methods  *****
 
-    private void setFrequencyThreshold(int progress) {
-        currentFrequencyThreshold = progress * 95;
+    private void setFrequencyThreshold(Double progress) {
+        double frequencyDouble = progress*95;
+        currentFrequencyThreshold = (int) Math.round(frequencyDouble);
         textViewFrequencyThreshold.setText(currentFrequencyThreshold + " Hz");
     }
 
     private void setIntervalThreshold(int progress) {
         currentIntervalThreshold = progress;
-        textViewIntervalThreshold.setText(currentIntervalThreshold.toString());
+        textViewIntervalThreshold.setText(currentIntervalThreshold.toString()+" seg");
         currentIncrement = (((double) 100 / ((double) currentIntervalThreshold)));
     }
 
     private void setIntensityThreshold (int progress) {
         currentIntensityThreshold = progress-100;
-        textViewIntensityThreshold.setText(currentIntensityThreshold.toString());
+        textViewIntensityThreshold.setText(currentIntensityThreshold.toString()+" dB");
     }
 
     private void setFrequencyEvaluatingCountDown() {
@@ -434,15 +439,13 @@ public class ReceptorActivity extends AppCompatActivity {
         countDownTimer.start();
     }
 
-    private void setTestResults() {
-        final Random r = new Random();
-        final Random r2 = new Random();
-        textViewFrequencyOutput.setText(currentFrequencyThreshold+","+r.nextInt(100)+1+" Hz");
-        textViewIntensityOutput.setText(currentIntensityThreshold+","+r2.nextInt(100)+1+" dB");
-
-        textViewFrequencyOutput.setTextColor(getResources().getColor(R.color.red_01));
-        chronometerIntervalOutput.setTextColor(getResources().getColor(R.color.red_01));
-        startChronometer();
+    private void resetDefaultParameters() {
+        seekBarFrequency.setProgress(FREQUENCY_THRESHOLD_DEFAULT/95);
+        setFrequencyThreshold((double)FREQUENCY_THRESHOLD_DEFAULT/95);
+        seekBarIntensity.setProgress(100+INTENSITY_THRESHOLD_DEFAULT);
+        setIntensityThreshold(100+INTENSITY_THRESHOLD_DEFAULT);
+        seekBarInterval.setProgress(INTERVAL_THRESHOLD_DEFAULT);
+        setIntervalThreshold(INTERVAL_THRESHOLD_DEFAULT);
     }
 
     // ******   General Methods  *****
